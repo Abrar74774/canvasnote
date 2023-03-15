@@ -32,10 +32,8 @@ const end = (e: MouseEvent | TouchEvent) => {
 }
 
 const setOffsets = () => {
-
     canvasOffsetX.value = canvas.value?.parentElement?.offsetLeft || 0;
     canvasOffsetY.value = canvas.value?.parentElement?.offsetTop|| 0;
-
 }
 
 const setupCanvas = () => {
@@ -54,6 +52,7 @@ onMounted(() => {
     ctx.value = canvas.value?.getContext('2d');
     console.log(canvas.value?.offsetLeft)
     setupCanvas()
+    window.addEventListener("resize", setOffsets);
 })
 
 
