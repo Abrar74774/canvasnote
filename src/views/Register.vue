@@ -3,7 +3,7 @@
 		<div class="font-sans max-w-sm mx-auto px-6 relative flex flex-wrap">
 			<div class="w-full relative mt-6">
 				<div class="text-center font-semibold text-black text-xl">
-					Login to your Dashboard
+					Register Your Account📝
 				</div>
 
 				<form class="mt-8">
@@ -23,7 +23,7 @@
 							</div>
 						</div>
 						<button class="btn w-full">
-							Login
+							Register
 						</button>
 					</div>
 				</form>
