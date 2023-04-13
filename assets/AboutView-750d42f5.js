@@ -1,0 +1,1 @@
+import{_ as t,o,c as s,a as e}from"./index-d16e4746.js";const _={},c={class:"about"},n=e("h1",null,"About",-1),a=e("p",null,"Draw your ideas and save them to your account!",-1),r=[n,a];function u(d,i){return o(),s("div",c,r)}const h=t(_,[["render",u]]);export{h as default};
