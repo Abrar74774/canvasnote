@@ -1,6 +1,16 @@
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from 'vue'
 import Canvas from './../components/canvas-components/Canvas.vue'
+import { useAuth0 } from "@auth0/auth0-vue";
+
+const { logout } = useAuth0();
+
+const handleLogout = () =>
+  logout({
+    logoutParams: {
+      returnTo: window.location.origin,
+    }
+  });
 
 
 const canvas = ref()
@@ -73,8 +83,7 @@ onMounted(() => {
                     <!-- Add button -->
                     <li class="flex justify-center">
                         <button type="button" class="btn font-medium rounded-full text-sm p-2.5 text-center items-center mr-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
-                                class="bi bi-plus" viewBox="0 0 16 16">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" viewBox="0 0 16 16">
                                 <path
                                     d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
                             </svg>
@@ -84,6 +93,9 @@ onMounted(() => {
                 </ul>
             </div>
         </aside>
+        <div class="w-full absolute bg-transparent flex content-end z-10">
+            <button @click="handleLogout" class="btn ml-auto mr-3 px-4 py-1">Logout</button>
+        </div>
         <Canvas ref="canvas" @save="saveCanvas" current-canvas={{currentCanvas}} />
     </div>
 </template>

@@ -1,4 +1,24 @@
-<script setup lang="ts">
+<script lang="ts">
+
+import { useAuth0 } from '@auth0/auth0-vue';
+
+export default {
+  setup() {
+    const { loginWithRedirect } = useAuth0();
+
+    return {
+      login: () => {
+        loginWithRedirect({
+          appState: {
+            target: "/dashboard",
+          },
+        });
+      }
+    };
+  }
+};
+
+
 </script>
 
 <template>
@@ -12,11 +32,9 @@
             Get Started
           </button>
         </router-link>
-        <router-link to="/login">
-          <button class="btn-outlined w-44 mx-2">
-            Login
-          </button>
-        </router-link>
+        <button @click="login" class="btn-outlined w-44 mx-2">
+          Login
+        </button>
       </div>
     </div>
   </header>
