@@ -1,23 +1,31 @@
 <script lang="ts" setup>
 
+import { addUser } from '@/api';
 import { useAuth0 } from '@auth0/auth0-vue';
+import { watch } from 'vue';
 
 
-const { loginWithRedirect } = useAuth0();
+const { loginWithRedirect, user, isAuthenticated } = useAuth0();
 
 
 const login = (e?: MouseEvent, signin:boolean = false) => {
   loginWithRedirect({
     appState: {
       target: "/dashboard",
-    },
-    authorizationParams: signin ?{
-      screen_hint: "signup", 
-    } : undefined
-  });
+    }
+  })
 };
 
-const signup = () => login(undefined, true);
+const signup = () => {
+  loginWithRedirect({
+    appState: {
+      target: "/dashboard",
+    },
+    authorizationParams: {
+      screen_hint: "signup"
+    } 
+  }).then(() => addUser(user))
+}
 
 
 </script>
