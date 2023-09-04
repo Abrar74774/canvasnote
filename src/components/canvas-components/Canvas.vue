@@ -67,7 +67,10 @@ const loadCanvas = (dataUrl: string) => {
     };
     img.src = dataUrl;
     setupCanvas()
-    end()
+    
+    drawing.value = false;
+    ctx.value.stroke();
+    ctx.value.beginPath();
 };
 
 const clear = () => {
