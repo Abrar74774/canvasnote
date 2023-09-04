@@ -1,33 +1,27 @@
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from 'vue'
 import Canvas from './../components/canvas-components/Canvas.vue'
-import { useAuth0 } from "@auth0/auth0-vue";
 
-const { logout } = useAuth0();
-
-const handleLogout = () =>
-  logout({
-    logoutParams: {
-      returnTo: window.location.origin,
-    }
-  });
 
 
 const canvas = ref()
-const state = reactive({ canvasList: [
-    {
-        name: "Canvas-1",
-        dataUrl: ""
-    },
-    {
-        name: "Canvas-2",
-        dataUrl: ""
-    },
-    {
-        name: "Canvas-3",
-        dataUrl: ""
-    },
-]});
+const state = reactive({
+    canvasList: [
+        {
+            name: "Canvas-1",
+            dataUrl: ""
+        },
+        {
+            name: "Canvas-2",
+            dataUrl: ""
+        },
+        {
+            name: "Canvas-3",
+            dataUrl: ""
+        },
+    ],
+    currentIndex: 2
+});
 
 const currentCanvas = ref(state.canvasList[0].name);
 
@@ -36,14 +30,22 @@ const saveCanvas = (dataUrl: string) => {
     if (current) current.dataUrl = dataUrl;
 }
 
-const loadCanvas = (canvasName: string) => {
+const addCanvas = () => {
+    state.canvasList.push({
+        name: "Canvas-" + (++state.currentIndex + 1),
+        dataUrl: ""
+    })
+}
+
+const loadCanvas = (canvasName: string, index: number) => {
+    state.currentIndex = index;
     currentCanvas.value = canvasName;
     const current = state.canvasList.find(canvas => canvas.name === canvasName);
     if (current) {
         canvas.value.loadCanvas(current.dataUrl);
-        console.log(current.dataUrl)
-    } 
-}
+        console.log(current.name)
+    }
+} 
 
 onMounted(() => {
     state.canvasList.forEach(note => {
@@ -55,7 +57,9 @@ onMounted(() => {
 
 
 
+
 </script>
+
 <template>
     <div class="flex">
         <aside class="w-64 z-40 h-screen">
@@ -67,35 +71,34 @@ onMounted(() => {
                             Canvasnote</div>
                     </li>
                     <li>
-                        <div 
+                        <div
                             class=" text-center flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white">
                             <span class="flex-1 whitespace-nowrap">Canvases</span>
                         </div>
                     </li>
                     <li>
-                        <div v-for="canvas of state.canvasList"
-                            @click="loadCanvas(canvas.name)"
-                            class="cursor-pointer text-center flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
-                            <span class="flex-1 whitespace-nowrap">{{canvas.name}}</span>
+                        <div v-for="(canvas, i) of state.canvasList" @click="loadCanvas(canvas.name, i)"
+                            :class="{'bg-gray-700': i === state.currentIndex}"
+                            class="cursor-pointer text-center flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600">
+                            <span class="flex-1 whitespace-nowrap">{{ canvas.name }}</span>
                         </div>
                     </li>
 
                     <!-- Add button -->
                     <li class="flex justify-center">
-                        <button type="button" class="btn font-medium rounded-full text-sm p-2.5 text-center items-center mr-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" viewBox="0 0 16 16">
+                        <button type="button" @click="addCanvas"
+                            class="btn font-medium rounded-full text-sm p-2.5 text-center items-center mr-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
+                                viewBox="0 0 16 16">
                                 <path
                                     d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
                             </svg>
-                            <span class="sr-only">Icon description</span>
+                            <span class="sr-only">Add Canvas</span>
                         </button>
                     </li>
                 </ul>
             </div>
         </aside>
-        <div class="w-full absolute bg-transparent flex content-end z-10">
-            <button @click="handleLogout" class="btn ml-auto mr-3 px-4 py-1">Logout</button>
-        </div>
         <Canvas ref="canvas" @save="saveCanvas" current-canvas={{currentCanvas}} />
     </div>
 </template>

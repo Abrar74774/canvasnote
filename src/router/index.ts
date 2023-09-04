@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { authGuard } from "@auth0/auth0-vue";
 import HomeView from '../views/HomeView.vue'
 
 const router = createRouter({
@@ -13,7 +12,6 @@ const router = createRouter({
     {
       path: '/about',
       name: 'about',
-      beforeEnter: authGuard,
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
@@ -22,26 +20,16 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/Login.vue')
     },
     {
       path: '/register',
       name: 'register',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/Register.vue')
     },
     {
       path: '/dashboard',
       name: 'dashboard',
-      beforeEnter: authGuard,
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/Dashboard.vue')
     }
   ]

@@ -30,6 +30,7 @@ const end = () => {
     drawing.value = false;
     ctx.value.stroke();
     ctx.value.beginPath();
+    saveCanvas();
 }
 
 const setOffsets = () => {
@@ -37,7 +38,6 @@ const setOffsets = () => {
     // these are relative to the viewport, i.e. the window
     canvasOffsetX.value = Math.floor(viewportOffset?.left ?? 0);
     canvasOffsetY.value = Math.floor(viewportOffset?.top ?? 0);
-    //console.log("offset: ", viewportOffset)
 }
 
 const setupCanvas = () => {
@@ -94,7 +94,7 @@ onMounted(() => {
             <div>
                 <canvas class="shadow-xl border-2 border-gray-100 rounded-md" width="{{width}}" height="{{height}}"
                 ref="canvas" @mousemove="draw" @mousedown="drawing = true" @mouseup="end"></canvas>
-                <Panel @change-color="strokeColor = $event" @clear="clear" @save="saveCanvas"/>
+                <Panel @change-color="strokeColor = $event" @clear="clear"/>
             </div>
         </div>
     </div>
