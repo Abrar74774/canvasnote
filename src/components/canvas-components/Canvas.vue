@@ -59,7 +59,10 @@ const loadCanvas = (dataUrl: string) => {
     if (!canvas.value) return;
     
     //const dataUrl = localStorage.getItem('canvasDataUrl');
-    if (!dataUrl) return;
+    if (!dataUrl.length) {
+        ctx.value.clearRect(0, 0, width, height);
+        return;
+    }
     
     const img = new Image();
     img.onload = () => {

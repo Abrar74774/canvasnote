@@ -8,19 +8,20 @@ const canvas = ref()
 const state = reactive({
     canvasList: [
         {
-            name: "Canvas-1",
+            name: "Canvas 1",
             dataUrl: ""
         },
         {
-            name: "Canvas-2",
+            name: "Canvas 2",
             dataUrl: ""
         },
         {
-            name: "Canvas-3",
+            name: "Canvas 3",
             dataUrl: ""
         },
     ],
-    currentIndex: 2
+    currentIndex: 0,
+    editing: -1
 });
 
 const currentCanvas = ref(state.canvasList[0].name);
@@ -32,7 +33,7 @@ const saveCanvas = (dataUrl: string) => {
 
 const addCanvas = () => {
     state.canvasList.push({
-        name: "Canvas-" + (++state.currentIndex + 1),
+        name: "Canvas " + (state.canvasList.length + 1),
         dataUrl: ""
     })
 }
@@ -58,10 +59,11 @@ onMounted(() => {
 
 
 
+
 </script>
 
 <template>
-    <div class="flex">
+    <div class="flex" @click="state.editing = -1">
         <aside class="w-64 z-40 h-screen">
             <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
                 <ul class="space-y-2">
@@ -70,17 +72,32 @@ onMounted(() => {
                             class="text-center m-1 p-3  text-base font-normal rounded-lg text-black dark:text-white bg-gray-100 dark:bg-gray-700">
                             Canvasnote</div>
                     </li>
-                    <li>
+                    <li> <!-- Header -->
                         <div
                             class=" text-center flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white">
                             <span class="flex-1 whitespace-nowrap">Canvases</span>
                         </div>
                     </li>
-                    <li>
+                    <li> <!-- Canvases -->
                         <div v-for="(canvas, i) of state.canvasList" @click="loadCanvas(canvas.name, i)"
                             :class="{'bg-gray-700': i === state.currentIndex}"
-                            class="cursor-pointer text-center flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600">
-                            <span class="flex-1 whitespace-nowrap">{{ canvas.name }}</span>
+                            class="cursor-pointer text-center flex items-center justify-between p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <div class="flex-1 whitespace-nowrap p-2">
+                                <input 
+                                    class="text-black" 
+                                    @click.stop="" 
+                                    @change="(e:any) => canvas.name = e.target.value" v-model="state.canvasList[i].name" 
+                                    type="text" 
+                                    v-if="i == state.editing">
+                                <div v-if="i !== state.editing">
+                                    {{ canvas.name }}
+                                </div>
+                            </div>
+                            <div class="flex-1">
+                                <button @click.stop="state.editing = i" class=" bg-gray-600 hover:bg-gray-500 font-medium rounded-full text-sm p-2 ml-auto">
+                                    Rename
+                                </button>
+                            </div>
                         </div>
                     </li>
 
