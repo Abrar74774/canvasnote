@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, nextTick } from 'vue'
 import Canvas from './../components/canvas-components/Canvas.vue'
+import { InMemoryCache } from '@auth0/auth0-vue';
 
 
 
@@ -56,6 +57,11 @@ onMounted(() => {
     currentCanvas.value = state.canvasList[0].name;
 })
 
+const edit = async (i:number) => {
+    state.editing = i;
+    await nextTick();
+    document.getElementById("inp")?.focus();
+}
 
 
 
@@ -84,7 +90,9 @@ onMounted(() => {
                             class="cursor-pointer text-center flex items-center justify-between p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
                             <div class="flex-1 whitespace-nowrap p-2">
                                 <input 
-                                    class="text-black" 
+                                    id="inp"
+                                    class="text-black bg-inherit text-inherit"
+                                    @focus="(e:any) => e.target.select()"
                                     @click.stop="" 
                                     @change="(e:any) => canvas.name = e.target.value" v-model="state.canvasList[i].name" 
                                     type="text" 
@@ -94,7 +102,7 @@ onMounted(() => {
                                 </div>
                             </div>
                             <div class="flex-1">
-                                <button @click.stop="state.editing = i" class=" bg-gray-600 hover:bg-gray-500 font-medium rounded-full text-sm p-2 ml-auto">
+                                <button @click.stop="edit(i)" class=" bg-gray-600 hover:bg-gray-500 font-medium rounded-full text-sm p-2 ml-auto">
                                     Rename
                                 </button>
                             </div>
