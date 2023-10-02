@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import { ref, reactive, onMounted, nextTick } from 'vue'
+import { ref, reactive, onMounted, nextTick, watch } from 'vue'
 import Canvas from './../components/canvas-components/Canvas.vue'
+import { saveData, loadData } from '../api'
 import { InMemoryCache } from '@auth0/auth0-vue';
 
 
@@ -21,15 +22,19 @@ const state = reactive({
             dataUrl: ""
         },
     ],
-    currentIndex: 0,
-    editing: -1
 });
 
+const activeState = reactive({
+    currentIndex: 0,
+    editing: -1
+})
 const currentCanvas = ref(state.canvasList[0].name);
 
-const saveCanvas = (dataUrl: string) => {
+const saveCanvas = async (dataUrl: string) => {
     const current = state.canvasList.find(canvas => canvas.name === currentCanvas.value);
-    if (current) current.dataUrl = dataUrl;
+    if (current) { 
+        current.dataUrl = dataUrl;
+    }
 }
 
 const addCanvas = () => {
@@ -40,28 +45,37 @@ const addCanvas = () => {
 }
 
 const loadCanvas = (canvasName: string, index: number) => {
-    state.currentIndex = index;
+    activeState.currentIndex = index;
     currentCanvas.value = canvasName;
     const current = state.canvasList.find(canvas => canvas.name === canvasName);
     if (current) {
         canvas.value.loadCanvas(current.dataUrl);
-        console.log(current.name)
+        // console.log(current.name)
     }
 } 
 
-onMounted(() => {
-    state.canvasList.forEach(note => {
-        currentCanvas.value = note.name;
-        canvas.value.saveCanvas()
-    })
-    currentCanvas.value = state.canvasList[0].name;
-})
-
-const edit = async (i:number) => {
-    state.editing = i;
+const startEdit = async (i:number) => {
+    activeState.editing = i;
     await nextTick();
     document.getElementById("inp")?.focus();
 }
+
+onMounted(() => {
+    const previousList = loadData();
+    if (previousList.length) {
+        console.log(previousList)
+        state.canvasList = previousList
+    }
+    // state.canvasList.forEach(note => {
+    //     currentCanvas.value = note.name;
+    //     //canvas.value.saveCanvas()
+    // })
+    currentCanvas.value = state.canvasList[0].name;
+})
+
+watch(state, (newState) => {
+    saveData(newState.canvasList)
+})
 
 
 
@@ -69,7 +83,10 @@ const edit = async (i:number) => {
 </script>
 
 <template>
-    <div class="flex" @click="state.editing = -1">
+    <div 
+        class="flex" 
+        @click="activeState.editing = -1" 
+    >
         <aside class="w-64 z-40 h-screen">
             <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
                 <ul class="space-y-2">
@@ -86,24 +103,33 @@ const edit = async (i:number) => {
                     </li>
                     <li> <!-- Canvases -->
                         <div v-for="(canvas, i) of state.canvasList" @click="loadCanvas(canvas.name, i)"
-                            :class="{'bg-gray-700': i === state.currentIndex}"
+                            :class="{'bg-gray-700': i === activeState.currentIndex}"
                             class="cursor-pointer text-center flex items-center justify-between p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
                             <div class="flex-1 whitespace-nowrap p-2">
-                                <input 
-                                    id="inp"
-                                    class="text-black bg-inherit text-inherit"
-                                    @focus="(e:any) => e.target.select()"
-                                    @click.stop="" 
-                                    @change="(e:any) => canvas.name = e.target.value" v-model="state.canvasList[i].name" 
-                                    type="text" 
-                                    v-if="i == state.editing">
-                                <div v-if="i !== state.editing">
+                                <form 
+                                    action="#"
+                                    @submit.prevent="activeState.editing = -1"
+                                    v-if="i == activeState.editing"
+                                >
+                                    <input 
+                                        id="inp"
+                                        class="text-black bg-inherit text-inherit w-full text-center"
+                                        @focus="(e:any) => e.target.select()"
+                                        @click.stop="" 
+                                        @change="(e:any) => canvas.name = e.target.value" v-model="state.canvasList[i].name" 
+                                        type="text" 
+                                    >
+                                </form>
+                                <div v-if="i !== activeState.editing">
                                     {{ canvas.name }}
                                 </div>
                             </div>
-                            <div class="flex-1">
-                                <button @click.stop="edit(i)" class=" bg-gray-600 hover:bg-gray-500 font-medium rounded-full text-sm p-2 ml-auto">
+                            <div class="flex-2 flex ml-auto">
+                                <button @click.stop="startEdit(i)" class=" bg-gray-600 hover:bg-gray-500 font-medium rounded-full text-sm p-2 m-1">
                                     Rename
+                                </button>
+                                <button @click.stop="" class=" bg-red-900 hover:bg-red-800 font-medium rounded-full text-sm p-2 m-1">
+                                    Delete
                                 </button>
                             </div>
                         </div>

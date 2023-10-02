@@ -19,4 +19,14 @@ export function addUser(user: any) {
     .catch(err => console.log(err))
 }
 
+export function saveData(canvasList: any[]) {
+    console.log("saved data")
+    window.localStorage.setItem("canvasnote_state", JSON.stringify(canvasList));
+}
+
+export function loadData() {
+    const data = window.localStorage.getItem("canvasnote_state") || "[]";
+    return JSON.parse(data);
+}
+
 //export function addUser
