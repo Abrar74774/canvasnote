@@ -78,7 +78,8 @@ const loadCanvas = (dataUrl: string) => {
 
 const clear = () => {
     if (!canvas.value || !ctx.value) return;
-    ctx.value.clearRect(0, 0, width, height)
+    ctx.value.clearRect(0, 0, width, height);
+    saveCanvas();
 }
 
 
