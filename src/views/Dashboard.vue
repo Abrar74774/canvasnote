@@ -107,6 +107,7 @@ watch(state, (newState) => {
                     </li>
                     <li> <!-- Canvases -->
                         <div v-for="(canvas, i) of state.canvasList" @click="loadCanvas(canvas.name, i)"
+                            v-bind:key="canvas.name"
                             :class="{'bg-gray-700': i === activeState.currentIndex}"
                             class="cursor-pointer text-center flex items-center justify-between p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
                             <div class="flex-1 whitespace-nowrap p-2">
