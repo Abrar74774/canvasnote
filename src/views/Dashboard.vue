@@ -2,7 +2,6 @@
 import { ref, reactive, onMounted, nextTick, watch } from 'vue'
 import Canvas from './../components/canvas-components/Canvas.vue'
 import { saveData, loadData } from '../api'
-import { InMemoryCache } from '@auth0/auth0-vue';
 
 
 
