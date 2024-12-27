@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import { useAuthStore } from '@/store/auth'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -20,6 +21,9 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
+      meta: {
+        hideForAuth: true
+      },
       component: () => import('../views/Login.vue')
     },
     {
@@ -33,6 +37,14 @@ const router = createRouter({
       component: () => import('../views/Dashboard.vue')
     }
   ]
+})
+
+router.beforeEach((to, from, next) => {
+  const auth = useAuthStore()
+  if (to.matched.some(record => record.meta.hideForAuth) && auth.isLoggedIn) {
+    next({ path: '/' });
+  }
+  next();
 })
 
 export default router
