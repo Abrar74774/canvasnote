@@ -1,4 +1,4 @@
-const url = import.meta.env.VITE_BACKEND_URL + '/api';
+const url = import.meta.env.VITE_API_SERVER_URL + '/api';
 
 export function testConnectivity() {
     fetch(url)

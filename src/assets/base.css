@@ -5,10 +5,10 @@
 
 @layer components {
   .btn {
-    @apply text-lg font-semibold bg-red-400 border-2 border-red-400 text-white rounded-lg px-6 py-3 block shadow-xl hover:text-white hover:bg-red-500 hover:border-red-500
+    @apply text-lg font-semibold bg-red-400 text-white rounded-lg px-6 py-3 block shadow-xl hover:text-white hover:bg-red-500
   }
   .btn-outlined {
-    @apply text-lg font-semibold text-red-400 border-solid border-2 border-red-400 rounded-lg px-6 py-3 block hover:text-red-500 hover:border-red-500
+    @apply text-lg font-semibold text-red-400 border-solid rounded-lg px-6 py-3 block hover:text-red-500
   }
 }
 

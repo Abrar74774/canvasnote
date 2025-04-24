@@ -2,9 +2,9 @@
 import { ref, reactive, onMounted, nextTick, watch, computed } from 'vue'
 import Canvas from './../components/canvas-components/Canvas.vue'
 import { saveData, loadData } from '../api'
-import { useAuthStore } from '@/store/auth.js';
+import { useUserStore } from '@/store/user';
 
-const auth = useAuthStore()
+const user = useUserStore()
 
 const state = reactive({
     canvasList: [
@@ -32,7 +32,7 @@ const canvas = ref()
 const currentCanvas = ref(state.canvasList[0].name);
 
 const ofUser = computed(() => {
-    return auth.isLoggedIn ? auth.user?.username + "'s" : ''
+    return user.isLoggedIn ? user.data?.username + "'s" : ''
 })
 
 const saveCanvas = async (dataUrl: string) => {
@@ -89,9 +89,14 @@ watch(state, (newState) => {
 <template>
     <div class="flex relative" @click="activeState.editing = -1">
         <div class="absolute top-0 right-0 p-2 z-10">
-            <button @click="auth.logout" class="btn cursor-pointer text-sm py-1 px-3">
+            <button v-if="user.isLoggedIn" @click="user.logout" class="btn cursor-pointer text-sm py-1 px-3">
                 Logout
             </button>
+            <router-link v-else to="/login">
+                <button class="btn bg-green-400 hover:bg-green-300 text-black cursor-pointer text-sm py-1 px-3">
+                    Login
+                </button>
+            </router-link>
         </div>
         <aside class="w-64 z-40 h-screen">
             <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">

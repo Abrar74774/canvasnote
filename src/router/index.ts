@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import { useAuthStore } from '@/store/auth'
+import { useUserStore } from '@/store/user'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -40,8 +40,8 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const auth = useAuthStore()
-  if (to.matched.some(record => record.meta.hideForAuth) && auth.isLoggedIn) {
+  const user = useUserStore()
+  if (to.matched.some(record => record.meta.hideForAuth) && user.isLoggedIn) {
     next({ path: '/' });
   }
   next();

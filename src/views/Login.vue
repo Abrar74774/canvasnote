@@ -1,14 +1,14 @@
 <script lang="ts" setup>
 import router from '@/router/index.js';
-import { useAuthStore } from '@/store/auth.js';
+import { useUserStore } from '@/store/user';
 import { ref } from 'vue';
-const auth = useAuthStore()
+const user = useUserStore()
 
-const username = ref('')
+const email = ref('')
 const password = ref('')
 
-const login = () => {
-	auth.login(username.value, password.value)
+const login = async () => {
+	await user.login(email.value, password.value)
 	router.push('/dashboard')
 }
 </script>
@@ -24,8 +24,8 @@ const login = () => {
 				<form class="mt-8" @submit.prevent="login">
 					<div class="mx-auto max-w-lg">
 						<div class="py-2">
-							<span class="px-1 text-sm text-gray-600">Username</span>
-							<input placeholder="" type="text" v-model="username"
+							<span class="px-1 text-sm text-gray-600">Email</span>
+							<input placeholder="" type="text" v-model="email"
 								class="text-md block px-3 py-2  rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none">
 						</div>
 						<div class="py-2">

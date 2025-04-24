@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import { useAuthStore } from '@/store/auth.js';
+import { useUserStore } from '@/store/user';
 
-const auth = useAuthStore()
+const user = useUserStore()
 
 </script>
 
@@ -10,7 +10,7 @@ const auth = useAuthStore()
   <header class="hero h-screen bg-gray-800 text-white flex justify-center items-center">
     <div>
       <h1 class="text-4xl text-center font-bold lg:text-6xl">
-        Welcome {{ auth.isLoggedIn ? auth.user?.username : 'to Canvasnote' }}
+        Welcome {{  'to Canvasnote' }}
       </h1>
       <h2 class="text-xl text-center mt-3">
         Your Personal Drawing and Markup Tool 📝
@@ -21,7 +21,7 @@ const auth = useAuthStore()
             Get Started
           </button>
         </router-link>
-        <template v-if="!auth.isLoggedIn">
+        <template v-if="!user.isLoggedIn">
           <router-link to="/login">
             <button class="btn w-44 mx-2">
               Login
